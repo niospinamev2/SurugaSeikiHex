@@ -74,11 +74,8 @@ class SurugaController:
     def obtener_eje(self, axis_number):
         return self.SSM.AxisComponents(axis_number)
 
-    def esperar_fin_movimiento(
-        self,
-        axis,
-        timeout_s,
-    ):
+    #==================================================   
+    def esperar_fin_movimiento(self, axis, timeout_s):
 
         inicio = time.time()
 
@@ -98,7 +95,7 @@ class SurugaController:
             )
 
             time.sleep(0.2)
-
+    #==================================================   
     def mover_eje(
         self,
         axis_number,
@@ -174,6 +171,7 @@ class SurugaController:
             axis.GetActualPosition(),
         )
 
+    #==================================================   
     def leer_posicion(
         self,
         axis_number,
@@ -184,9 +182,27 @@ class SurugaController:
         )
 
         return axis.GetActualPosition()
-
+    
+    #==================================================   
     def saludo(self):
 
         print(
             "Hola desde SurugaController"
         )
+
+
+    #==================================================   
+    def mover_absoluto(self, axis_number, posicion):
+
+
+        if not axis.IsServoOn():
+
+            print("Activando servo...")
+
+            axis.TurnOnServo()
+
+            time.sleep(0.5)        
+
+        axis = self.obtener_eje(axis_number)
+
+        return axis.MoveAbsolute(posicion)    

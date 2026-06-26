@@ -7,14 +7,24 @@ suruga.saludo()
 suruga.conectar()
 
 pos = suruga.leer_posicion(1)
-
 print(pos)
 
-suruga.mover_eje(
-    axis_number=1,
-    distance=10000,
-)
+suruga.mover_absoluto(1, 20000)
 
-difpos = pos - suruga.leer_posicion(1)
+pos = suruga.leer_posicion(1)
+print(pos)
 
-print(difpos)
+# suruga.conectar()
+
+# pos = suruga.leer_posicion(1)
+
+# print(pos)
+
+# suruga.mover_eje(
+#     axis_number=1,
+#     distance=10000,
+# )
+
+# difpos = pos - suruga.leer_posicion(1)
+
+# print(difpos)

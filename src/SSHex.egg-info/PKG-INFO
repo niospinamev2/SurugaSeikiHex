@@ -5,3 +5,5 @@ Summary: Plantilla de proyecto.
 Requires-Python: >=3.14
 Description-Content-Type: text/markdown
 Requires-Dist: pythonnet>=3.1.0
+Requires-Dist: matplotlib>=3.10.8
+Requires-Dist: plotly>=6.0.0

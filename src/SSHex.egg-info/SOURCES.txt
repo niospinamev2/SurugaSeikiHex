@@ -6,6 +6,7 @@ src/SSHex.egg-info/requires.txt
 src/SSHex.egg-info/top_level.txt
 src/pic_upv/__init__.py
 src/pic_upv/control_suruga.py
+src/pic_upv/control_suruga_class.py
 src/pic_upv/dlls/Microsoft.Extensions.Logging.Abstractions.dll
 src/pic_upv/dlls/System.Buffers.dll
 src/pic_upv/dlls/System.ComponentModel.Composition.dll
@@ -24,5 +25,9 @@ src/pic_upv/dlls/TwinCAT.Ads.Abstractions.dll
 src/pic_upv/dlls/TwinCAT.Ads.Server.dll
 src/pic_upv/dlls/TwinCAT.Ads.dll
 src/pic_upv/dlls/srgmc.dll
+tests/TestAlineamiento.py
 tests/TestMovimiento.py
+tests/TestMovimientoClass.py
+tests/TestMovimientov2.py
+tests/TestProfile.py
 tests/test_dummy.py
