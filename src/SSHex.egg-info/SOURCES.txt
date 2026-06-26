@@ -25,6 +25,11 @@ src/pic_upv/dlls/TwinCAT.Ads.Abstractions.dll
 src/pic_upv/dlls/TwinCAT.Ads.Server.dll
 src/pic_upv/dlls/TwinCAT.Ads.dll
 src/pic_upv/dlls/srgmc.dll
+src/pic_upv/suruga/__init__.py
+src/pic_upv/suruga/axis_atribute.py
+src/pic_upv/suruga/axis_components.py
+src/pic_upv/suruga/profile.py
+src/pic_upv/suruga/system.py
 tests/TestAlineamiento.py
 tests/TestMovimiento.py
 tests/TestMovimientoClass.py

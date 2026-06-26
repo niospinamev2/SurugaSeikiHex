@@ -1,5 +1,6 @@
 import time
-
+from typing import Union
+from pic_upv.suruga.axis_atribute import AxisAttribute
 
 class Profile:
     """
@@ -17,7 +18,7 @@ class Profile:
 
     def configurar(
         self,
-        main_axis=1,
+        main_axis: Union[int, AxisAttribute, str] = 1,
         signal_ch1=1,
         rango=100,
         velocidad=26,
@@ -33,7 +34,7 @@ class Profile:
 
         param = self.system.SSM.Profile.ProfileParameter()
 
-        param.mainAxisNumber = main_axis
+        param.mainAxisNumber = int(AxisAttribute.from_any(main_axis))
         param.sub1AxisNumber = sub1_axis
         param.sub2AxisNumber = sub2_axis
 
@@ -64,7 +65,9 @@ class Profile:
     # Esperar finalización
     # ======================================================
 
-    def esperar(self, intervalo=0.1):
+    def esperar(self, intervalo=0.1, retardo_inicial=0.2):
+
+        time.sleep(retardo_inicial)
 
         while True:
 
