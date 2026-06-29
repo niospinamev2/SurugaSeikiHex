@@ -1,5 +1,6 @@
 import time
-
+from typing import Union
+from pic_upv.suruga.axis_atribute import AxisAttribute
 
 class Alignment:
     """
@@ -79,8 +80,8 @@ class Alignment:
 
     def configurar_flat(
         self,
-        main_stage_x,
-        main_stage_y,
+        main_stage_x: Union[int, AxisAttribute, str],
+        main_stage_y: Union[int, AxisAttribute, str],
         sub_stage_xy,
         pm_ch=1,
         analog_ch=1,
@@ -112,11 +113,11 @@ class Alignment:
 
         param = self.system.SSM.Alignment.FlatParameter()
 
-        # Numero del eje principal de alineamiento en X 
-        param.mainStageNumberX = main_stage_x
+        # Numero del eje principal de alineamiento en X         
+        param.mainStageNumberX = int(AxisAttribute.from_any(main_stage_x))
 
         # Numero del eje principal de alineamiento en Y 
-        param.mainStageNumberY = main_stage_y
+        param.mainStageNumberY = int(AxisAttribute.from_any(main_stage_y))
 
         # Numero del eje de interpolacion XY po defecto 0 = None
         param.subStageNumberXY = sub_stage_xy
