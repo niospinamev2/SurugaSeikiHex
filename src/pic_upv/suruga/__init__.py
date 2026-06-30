@@ -3,3 +3,4 @@ from .axis_components import AxisComponents
 from .profile import Profile
 from .alignment import Alignment
 from .axis_atribute import AxisAttribute
+from .power_meter import PowerMeter
