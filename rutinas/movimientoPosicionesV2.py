@@ -1,5 +1,32 @@
 from pic_upv.suruga import System, AxisComponents, Alignment, PowerMeter
 
+import os
+
+
+def guardar_origen(x1, x2):
+
+    with open(ORIGIN_FILE, "w") as f:
+        f.write(f"{x1}\n")
+        f.write(f"{x2}\n")
+
+
+def cargar_origen():
+
+    with open(ORIGIN_FILE, "r") as f:
+        x1 = float(f.readline())
+        x2 = float(f.readline())
+
+    return x1, x2
+
+# ======================================================
+# Configuración
+# ======================================================
+
+USE_SAVED_ORIGIN = False      # True -> usar origen guardado
+SAVE_ORIGIN = True            # Guardar el origen al iniciar
+
+ORIGIN_FILE = "origin.txt"
+
 # ======================================================
 # Inicialización
 # ======================================================
@@ -60,9 +87,25 @@ waveguides = [
 # Se asume que la máquina YA está posicionada sobre WG0
 # ======================================================
 
-origin_x1 = x1.get_actual_position()
-origin_x2 = x2.get_actual_position()
+if USE_SAVED_ORIGIN and os.path.exists(ORIGIN_FILE):
 
+    print("Usando origen almacenado...")
+
+    origin_x1, origin_x2 = cargar_origen()
+
+    x1.move_absolute(origin_x1)
+    x2.move_absolute(origin_x2)
+
+else:
+
+    print("Usando posición actual como origen...")
+
+    origin_x1 = x1.get_actual_position()
+    origin_x2 = x2.get_actual_position()
+
+    if SAVE_ORIGIN:
+        guardar_origen(origin_x1, origin_x2)
+        
 print("Origen de la máquina")
 print(f"X1 = {origin_x1:.3f}")
 print(f"X2 = {origin_x2:.3f}")
