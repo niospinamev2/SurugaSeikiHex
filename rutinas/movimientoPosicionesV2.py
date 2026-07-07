@@ -66,7 +66,7 @@ flat_right = {
     "init_range": -20,
 }
 
-suruga.conectar()
+suruga.connect()
 
 # Crear el objeto Power Meter
 pm = PowerMeter(suruga)
@@ -133,17 +133,17 @@ for wg in waveguides:
 
     print(f"Alineando izquierda - {wg['name']}")
 
-    alignment.configurar_flat(**flat_left)
-    alignment.iniciar_flat()
-    alignment.esperar()
+    alignment.set_flat(**flat_left)
+    alignment.start_flat()
+    alignment.wait_until_complete()
 
     input("Presione Enter para alinear a la derecha...")
 
     print(f"Alineando derecha - {wg['name']}")
 
-    alignment.configurar_flat(**flat_right)
-    alignment.iniciar_flat()
-    alignment.esperar()
+    alignment.set_flat(**flat_right)
+    alignment.start_flat()
+    alignment.wait_until_complete()
 
     power = pm.get_power(channel)
     print(f"Potencia: {power}")

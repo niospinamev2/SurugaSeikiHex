@@ -3,21 +3,21 @@ import matplotlib.pyplot as plt
 
 suruga = System()
 
-suruga.conectar()
+suruga.connect()
 
 alignment = Alignment(suruga)
 
-alignment.configurar_flat(
+alignment.set_flat(
     main_stage_x="x1",
     main_stage_y="y1",
     sub_stage_xy=0,
 )
 
-alignment.iniciar_flat()
+alignment.start_flat()
 
-alignment.esperar()
+alignment.wait_until_complete()
 
-# datos = alignment.obtener_datos(
+# datos = alignment.get_profile_data(
 #     suruga.SSM.Alignment.ProfileDataType.FieldSearch
 # )
 

@@ -4,7 +4,7 @@ from pic_upv.suruga import System, PowerMeter
 suruga = System()
 
 # Conectar con el controlador
-suruga.conectar()
+suruga.connect()
 
 # Crear el objeto Power Meter
 pm = PowerMeter(suruga)

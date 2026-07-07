@@ -24,12 +24,12 @@ def cargar_origen():
 # ======================================================
 # Configuración
 # ======================================================
-USE_SAVED_ORIGIN = True      # True -> usar origen guardado
+USE_SAVED_ORIGIN = False      # True -> usar origen guardado
 SAVE_ORIGIN = False            # Guardar el origen al iniciar
 
 ORIGIN_FILE = "origin.txt"
 
-num_repeticiones = 10
+num_repeticiones = 1
 channel = 1
 
 # ======================================================
@@ -68,7 +68,7 @@ flat_right = {
     "init_range": -20,
 }
 
-suruga.conectar()
+suruga.connect()
 
 pm = PowerMeter(suruga)
 
@@ -154,17 +154,17 @@ for repeticion in range(num_repeticiones):
 
         print("Alineando izquierda...")
 
-        alignment.configurar_flat(**flat_left)
-        alignment.iniciar_flat()
-        alignment.esperar()
+        alignment.set_flat(**flat_left)
+        alignment.start_flat()
+        alignment.wait_until_complete()
 
         time.sleep(1)
 
         print("Alineando derecha...")
 
-        alignment.configurar_flat(**flat_right)
-        alignment.iniciar_flat()
-        alignment.esperar()
+        alignment.set_flat(**flat_right)
+        alignment.start_flat()
+        alignment.wait_until_complete()
 
         time.sleep(1)
 

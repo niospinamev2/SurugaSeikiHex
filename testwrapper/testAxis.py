@@ -2,14 +2,14 @@ from pic_upv.suruga import System, AxisComponents
 
 suruga = System()
 
-suruga.saludo()
+suruga.greet()
 
 x1 = AxisComponents(suruga, "x1")
 
 # Tan solo quiero confirmar que el nombre coincida con el numero del eje
 print(x1.attribute)
 
-suruga.conectar()
+suruga.connect()
 
 # # Movimiento en +x teniendo como referencia la camara
 # x1.move_relative(63.5, speed=20.0) 

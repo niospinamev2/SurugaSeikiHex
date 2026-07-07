@@ -16,7 +16,7 @@ class Alignment:
     # Configuración Single
     # ======================================================
 
-    def configurar_single(
+    def set_single(
         self,
         main_stage_x,
         sub_stage_x,
@@ -78,7 +78,7 @@ class Alignment:
     # Configuración Flat
     # ======================================================
 
-    def configurar_flat(
+    def set_flat(
         self,
         main_stage_x: Union[int, AxisAttribute, str],
         main_stage_y: Union[int, AxisAttribute, str],
@@ -166,42 +166,42 @@ class Alignment:
     # Inicio
     # ======================================================
 
-    def iniciar_single(self):
+    def start_single(self):
         return self.alignment.StartSingle()
 
-    def iniciar_flat(self):
+    def start_flat(self):
         return self.alignment.StartFlat()
 
     # ======================================================
     # Control
     # ======================================================
 
-    def detener(self):
+    def stop(self):
         return self.alignment.Stop()
 
-    def estado(self):
+    def get_status(self):
         return self.alignment.GetStatus()
 
-    def codigo_error(self):
+    def get_error_code(self):
         return self.alignment.GetErrorCode()
 
-    def eje_error(self):
+    def get_error_axis_id(self):
         return self.alignment.GetErrorAxisID()
 
-    def estado_alineamiento(self):
+    def get_aligning_status(self):
         return self.alignment.GetAligningStatus()
 
     # ======================================================
     # Espera
     # ======================================================
 
-    def esperar(self, intervalo=0.1, retardo_inicial=0.2):
+    def wait_until_complete(self, intervalo=0.1, retardo_inicial=0.2):
 
         time.sleep(retardo_inicial)
 
         while True:
 
-            estado = self.estado()
+            estado = self.get_status()
 
             print("Estado:", estado)
 
@@ -214,19 +214,19 @@ class Alignment:
     # Mediciones
     # ======================================================
 
-    def obtener_voltaje(self, canal):
+    def get_voltage(self, canal):
 
         return self.alignment.GetVoltage(canal)
 
-    def obtener_potencia(self, canal):
+    def get_power(self, canal):
 
         return self.alignment.GetPower(canal)
 
-    def obtener_longitud_onda(self, canal):
+    def get_measurement_wavelength(self, canal):
 
         return self.alignment.GetMeasurementWaveLength(canal)
 
-    def configurar_longitud_onda(self, canal, longitud_onda):
+    def set_measurement_wavelength(self, canal, longitud_onda):
 
         return self.alignment.SetMeasurementWaveLength(
             canal,
@@ -237,7 +237,7 @@ class Alignment:
     # Descarga de perfiles
     # ======================================================
 
-    def obtener_datos(self, profile_type):
+    def get_profile_data(self, profile_type):
 
         paquetes = self.alignment.GetProfilePacketSumIndex(profile_type)
 
@@ -261,3 +261,19 @@ class Alignment:
             datos["signal2"].extend(paquete.signalCh2List)
 
         return datos
+
+    configurar_single = set_single
+    configurar_flat = set_flat
+    iniciar_single = start_single
+    iniciar_flat = start_flat
+    detener = stop
+    estado = get_status
+    codigo_error = get_error_code
+    eje_error = get_error_axis_id
+    estado_alineamiento = get_aligning_status
+    esperar = wait_until_complete
+    obtener_voltaje = get_voltage
+    obtener_potencia = get_power
+    obtener_longitud_onda = get_measurement_wavelength
+    configurar_longitud_onda = set_measurement_wavelength
+    obtener_datos = get_profile_data

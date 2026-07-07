@@ -2,9 +2,9 @@ from pic_upv.suruga import System, AxisComponents
 
 suruga = System()
 
-suruga.saludo()
+suruga.greet()
 
-# suruga.conectar()
+# suruga.connect()
 
 # x1 = AxisComponents(suruga, 1)
 

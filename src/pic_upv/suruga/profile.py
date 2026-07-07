@@ -16,38 +16,38 @@ class Profile:
     # Configuración
     # ======================================================
 
-    def configurar(
+    def set_profile(
         self,
-        main_axis: Union[int, AxisAttribute, str] = 1,
-        signal_ch1=1,
-        rango=100,
-        velocidad=26,
+        main_axis_number: Union[int, AxisAttribute, str] = 1,
+        signal_ch1_number=1,
+        main_range=100,
+        speed=26,
         smoothing=0,
-        sub1_axis=0,
-        sub2_axis=0,
-        signal_ch2=0,
-        accel=0,
-        decel=0,
+        sub1_axis_number=0,
+        sub2_axis_number=0,
+        signal_ch2_number=0,
+        accel_rate=0,
+        decel_rate=0,
         sub1_range=0,
         sub2_range=0,
     ):
 
         param = self.system.SSM.Profile.ProfileParameter()
 
-        param.mainAxisNumber = int(AxisAttribute.from_any(main_axis))
-        param.sub1AxisNumber = sub1_axis
-        param.sub2AxisNumber = sub2_axis
+        param.mainAxisNumber = int(AxisAttribute.from_any(main_axis_number))
+        param.sub1AxisNumber = sub1_axis_number
+        param.sub2AxisNumber = sub2_axis_number
 
-        param.signalCh1Number = signal_ch1
-        param.signalCh2Number = signal_ch2
+        param.signalCh1Number = signal_ch1_number
+        param.signalCh2Number = signal_ch2_number
 
-        param.mainRange = rango
+        param.mainRange = main_range
         param.sub1Range = sub1_range
         param.sub2Range = sub2_range
 
-        param.speed = velocidad
-        param.accelRate = accel
-        param.decelRate = decel
+        param.speed = speed
+        param.accelRate = accel_rate
+        param.decelRate = decel_rate
 
         param.smoothing = smoothing
 
@@ -57,7 +57,7 @@ class Profile:
     # Inicio
     # ======================================================
 
-    def iniciar(self):
+    def start(self):
 
         return self.profile.Start()
 
@@ -65,7 +65,7 @@ class Profile:
     # Esperar finalización
     # ======================================================
 
-    def esperar(self, intervalo=0.1, retardo_inicial=0.2):
+    def wait_until_complete(self, intervalo=0.1, retardo_inicial=0.2):
 
         time.sleep(retardo_inicial)
 
@@ -84,7 +84,7 @@ class Profile:
     # Descargar datos
     # ======================================================
 
-    def obtener_datos(self):
+    def get_profile_data(self):
 
         paquetes = self.profile.GetProfilePacketSumIndex()
 
@@ -110,3 +110,8 @@ class Profile:
             datos["signal2"].extend(paquete.signalCh2List)
 
         return datos
+
+    configurar = set_profile
+    iniciar = start
+    esperar = wait_until_complete
+    obtener_datos = get_profile_data

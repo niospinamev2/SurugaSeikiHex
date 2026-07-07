@@ -4,31 +4,31 @@ import matplotlib.pyplot as plt
 
 suruga = System()
 
-suruga.saludo()
+suruga.greet()
 
-suruga.conectar()
+suruga.connect()
 
 profile = Profile(suruga)
 
-error = profile.configurar(
-    main_axis="x2",
-    signal_ch1=1,
-    rango=500,
-    velocidad=25,
+error = profile.set_profile(
+    main_axis_number="x2",
+    signal_ch1_number=1,
+    main_range=50,
+    speed=25,
     smoothing=0,
-    accel = 100,
-    decel = 100,
+    accel_rate=100,
+    decel_rate=100,
 )
 
 print(error)
 
-print(profile.iniciar())
+print(profile.start())
 
-estado = profile.esperar()
+estado = profile.wait_until_complete()
 
 print("Estado final:", estado)
 
-datos = profile.obtener_datos()
+datos = profile.get_profile_data()
 
 #======================================================
 # Plotting the results

@@ -13,14 +13,14 @@ class System:
     ):
         
         self.direccion = direccion
-        self.SSM = self._cargar_suruga() # Ya es un atributo publico en System por lo que lo puedo llamar desde AxisComponents
+        self.SSM = self._load_suruga() # Ya es un atributo publico en System por lo que lo puedo llamar desde AxisComponents
         # Define una instancia de la clase "System"
         self.system = self.SSM.System.Instance
         # Le indica a la instancia de "System" la dirección del equipo Suruga-Seiki
         self.system.SetAddress(self.direccion)
 
     #==================================================    
-    def _obtener_ruta_dll(self):
+    def _get_dll_path(self):
 
         return (
             Path(__file__).parent.parent
@@ -29,8 +29,8 @@ class System:
         )
 
     #==================================================
-    def _cargar_suruga(self):
-        srgmc_path = self._obtener_ruta_dll()
+    def _load_suruga(self):
+        srgmc_path = self._get_dll_path()
 
         if not srgmc_path.exists():
 
@@ -49,7 +49,7 @@ class System:
         return SSM
     
     #==================================================
-    def conectar(self, timeout_s=20):
+    def connect(self, timeout_s=20):
 
         print("Conectando al equipo Suruga-Seiki...")
         print("Dirección:", self.direccion)
@@ -72,11 +72,16 @@ class System:
         return self.system.Connected
     
     #==================================================   
-    def saludo(self):
+    def greet(self):
 
         print(
             "Hola desde SurugaController"
         )
+
+    _obtener_ruta_dll = _get_dll_path
+    _cargar_suruga = _load_suruga
+    conectar = connect
+    saludo = greet
 
 
     # def __init__(self):
