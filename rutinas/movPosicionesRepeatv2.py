@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime
 import time
 import os
+import numpy as np
 
 from pic_upv.suruga import System, AxisComponents, Alignment, PowerMeter
 
@@ -168,7 +169,13 @@ for repeticion in range(num_repeticiones):
 
         time.sleep(1)
 
-        power = pm.get_power(channel)
+        medidas = []
+
+        for i in range(10):
+            medidas.append(pm.get_power(channel))
+            time.sleep(0.1)
+
+        power = np.mean(medidas)
 
         time.sleep(1)
 
