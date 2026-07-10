@@ -6,20 +6,28 @@ import numpy as np
 import pyvisa
 
 
+# Esta clase actua como una caja que solo busca almacenar dos variables 
+# Wavelength y Power, actua como una clase pasiva que recibe los resulta
+# dos de la medición y lo almacena de forma organizada
 @dataclass
 class TraceData:
     wavelength_nm: np.ndarray
     power_dbm: np.ndarray
 
     def save_txt(self, path):
+        # Convertir la ruta en un objeto Path
         path = Path(path)
+        # Verifico la carpeta donde se encuentra el archivo, mkdir()
+        # crea la carpeta en caso de que no exista, parents=True crea carpetas 
+        # intermedias si hacen falta, exist_ok=True evita que aparezca un error 
+        # si la carpeta ya existe
         path.parent.mkdir(parents=True, exist_ok=True)
         data = np.column_stack([self.wavelength_nm, self.power_dbm])
         np.savetxt(
             path,
             data,
-            fmt="%.10f",
-            delimiter="\t",
+            fmt="%.10f", # Escribe cada número con 10 decimales
+            delimiter="\t", # Tab como separador
             header="Wavelength [nm]\tPower [dBm]",
         )
 
