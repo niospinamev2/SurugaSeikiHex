@@ -70,9 +70,9 @@ def load_chip(excel_file):
 
     workbook = load_workbook(excel_file)
 
-    if "Measurements" not in workbook.sheetnames:
+    if "MeasurementPaths" not in workbook.sheetnames:
 
-        _generate_measurement_plan_sheet(
+        _generate_measurement_paths_sheet(
             excel_file,
             chip
         )
@@ -80,14 +80,14 @@ def load_chip(excel_file):
         raise MeasurementPlanGenerated(
 
             "\n"
-            "No measurement plan was found.\n\n"
+            "No measurement paths were found.\n\n"
 
             "AUTOMAPER has automatically generated a "
-            "'Measurements' sheet.\n\n"
+            "'MeasurementPaths' sheet.\n\n"
 
             "Please:\n"
             "  1. Open the Excel file.\n"
-            "  2. Review the generated measurement plan.\n"
+            "  2. Review the generated measurement paths.\n"
             "  3. Enable/disable the desired measurements.\n"
             "  4. Save the Excel file.\n"
             "  5. Run the program again.\n"
@@ -98,16 +98,21 @@ def load_chip(excel_file):
     # Read measurement plan
     # --------------------------------------------------
 
-    measurements_df = pd.read_excel(
+    measurement_paths_df = pd.read_excel(
         excel_file,
-        sheet_name="Measurements"
+        sheet_name="MeasurementPaths"
     )
 
-    measurement_plan = _build_measurement_plan(
-        measurements_df
+    measurement_paths = _build_measurement_paths(
+        measurement_paths_df
     )
 
-    return chip, measurement_plan
+    measurement_plan = create_measurement_plan(
+    chip,
+    measurement_paths
+    )
+
+    return chip, measurement_paths, measurement_plan
 
 # ======================================================
 # VISUALIZATION
@@ -124,12 +129,68 @@ def plot_chip(chip):
     pprint(chip)
 
 
-# def plot_measurement_plan(measurement_plan):
-#     """
-#     Muestra el plan de medida.
-#     """
+def plot_measurement_paths(measurement_paths, chip):
+    """
+    Display the enabled measurement plan.
+    """
 
-#     pass
+    print("=" * 80)
+    print("MEASUREMENT PATHS")
+    print("=" * 80)
+
+    for measurement in measurement_paths:
+
+        device = chip[measurement["device"]]
+
+        input_port = device["ports"][measurement["input"]]
+
+        output_port = device["ports"][measurement["output"]]
+
+        print("-" * 80)
+
+        print(f"Device : {measurement['device']}")
+
+        print(
+            f"Input  : {measurement['input']}"
+            f" ({input_port['x']:.2f}, {input_port['y']:.2f}) µm"
+        )
+
+        print(
+            f"Output : {measurement['output']}"
+            f" ({output_port['x']:.2f}, {output_port['y']:.2f}) µm"
+        )
+
+        # print(f"Status : {measurement['status']}")
+
+
+def plot_measurement_plan(measurement_plan):
+    """
+    Display the generated measurement plan.
+    """
+
+    print("=" * 80)
+    print("MEASUREMENT PLAN")
+    print("=" * 80)
+
+    for measurement in measurement_plan:
+
+        print("-" * 80)
+
+        print(f"Device : {measurement['device']}")
+
+        print(
+            f"Input  : {measurement['input']['name']}"
+            f" ({measurement['input']['x']:.2f}, "
+            f"{measurement['input']['y']:.2f}) µm"
+        )
+
+        print(
+            f"Output : {measurement['output']['name']}"
+            f" ({measurement['output']['x']:.2f}, "
+            f"{measurement['output']['y']:.2f}) µm"
+        )
+
+        print(f"Status : {measurement['status']}")
 
 
 # def save_measurement_results(chip, filename):
@@ -147,6 +208,85 @@ def plot_chip(chip):
 
 #     pass
 
+# ======================================================
+# FUNCIONES
+# ======================================================
+
+def create_measurement_plan(chip, measurement_paths):
+    """
+    Create the measurement plan from the chip description
+    and the enabled measurement paths.
+    """
+
+    measurement_plan = []
+
+    for path in measurement_paths:
+
+        # ----------------------------------------------
+        # Get device
+        # ----------------------------------------------
+
+        device = chip[path["device"]]
+
+        # ----------------------------------------------
+        # Skip disabled devices
+        # ----------------------------------------------
+
+        if not device["measure"]:
+            continue
+
+        # ----------------------------------------------
+        # Skip disabled paths
+        # ----------------------------------------------
+
+        if not path["enabled"]:
+            continue
+
+        # ----------------------------------------------
+        # Get ports
+        # ----------------------------------------------
+
+        input_port = device["ports"][path["input"]]
+
+        output_port = device["ports"][path["output"]]
+
+        # ----------------------------------------------
+        # Create measurement
+        # ----------------------------------------------
+
+        measurement_plan.append({
+
+            "device": path["device"],
+
+            "input": {
+
+                "name": path["input"],
+
+                "x": input_port["x"],
+
+                "y": input_port["y"]
+
+            },
+
+            "output": {
+
+                "name": path["output"],
+
+                "x": output_port["x"],
+
+                "y": output_port["y"]
+
+            },
+
+            "status": path["status"],
+
+            "power": path["power"],
+
+            "timestamp": path["timestamp"]
+
+        })
+
+    return measurement_plan
 
 # ======================================================
 # FUNCIONES INTERNAS
@@ -166,7 +306,7 @@ def _build_chip(devices_df, ports_df):
 
             "type": row["Type"],
 
-            "measure": row["Measure"],
+            "measure": row["Measure"] == "YES",
 
             "ports": {}
 
@@ -193,13 +333,13 @@ def _build_chip(devices_df, ports_df):
     return chip
 
 
-def _build_measurement_plan(measurements_df):
+def _build_measurement_paths(measurement_paths_df):
 
-    measurement_plan = []
+    measurement_paths = []
 
-    for _, row in measurements_df.iterrows():
+    for _, row in measurement_paths_df.iterrows():
 
-        measurement_plan.append({
+        measurement_paths.append({
 
             "device": row["Device"],
 
@@ -217,12 +357,12 @@ def _build_measurement_plan(measurements_df):
 
         })
 
-    return measurement_plan
+    return measurement_paths
 
 
-def _generate_measurement_plan_sheet(excel_file, chip):
+def _generate_measurement_paths_sheet(excel_file, chip):
     """
-    Automatically generate the Measurements sheet.
+    Automatically generate the MeasurementPaths sheet.
 
     All possible Input -> Output combinations are created
     and enabled by default.
@@ -230,10 +370,10 @@ def _generate_measurement_plan_sheet(excel_file, chip):
 
     workbook = load_workbook(excel_file)
 
-    if "Measurements" in workbook.sheetnames:
-        del workbook["Measurements"]
+    if "MeasurementPaths" in workbook.sheetnames:
+        del workbook["MeasurementPaths"]
 
-    worksheet = workbook.create_sheet("Measurements")
+    worksheet = workbook.create_sheet("MeasurementPaths")
 
     worksheet.append([
 

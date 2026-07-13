@@ -107,7 +107,12 @@ def load_chip(excel_file):
         measurement_paths_df
     )
 
-    return chip, measurement_paths
+    measurement_plan = create_measurement_plan(
+    chip,
+    measurement_paths
+    )
+
+    return chip, measurement_paths, measurement_plan
 
 # ======================================================
 # VISUALIZATION
@@ -158,6 +163,36 @@ def plot_measurement_paths(measurement_paths, chip):
         # print(f"Status : {measurement['status']}")
 
 
+def plot_measurement_plan(measurement_plan):
+    """
+    Display the generated measurement plan.
+    """
+
+    print("=" * 80)
+    print("MEASUREMENT PLAN")
+    print("=" * 80)
+
+    for measurement in measurement_plan:
+
+        print("-" * 80)
+
+        print(f"Device : {measurement['device']}")
+
+        print(
+            f"Input  : {measurement['input']['name']}"
+            f" ({measurement['input']['x']:.2f}, "
+            f"{measurement['input']['y']:.2f}) µm"
+        )
+
+        print(
+            f"Output : {measurement['output']['name']}"
+            f" ({measurement['output']['x']:.2f}, "
+            f"{measurement['output']['y']:.2f}) µm"
+        )
+
+        print(f"Status : {measurement['status']}")
+
+
 # def save_measurement_results(chip, filename):
 #     """
 #     Guarda los resultados de las medidas.
@@ -173,6 +208,85 @@ def plot_measurement_paths(measurement_paths, chip):
 
 #     pass
 
+# ======================================================
+# FUNCIONES
+# ======================================================
+
+def create_measurement_plan(chip, measurement_paths):
+    """
+    Create the measurement plan from the chip description
+    and the enabled measurement paths.
+    """
+
+    measurement_plan = []
+
+    for path in measurement_paths:
+
+        # ----------------------------------------------
+        # Get device
+        # ----------------------------------------------
+
+        device = chip[path["device"]]
+
+        # ----------------------------------------------
+        # Skip disabled devices
+        # ----------------------------------------------
+
+        if not device["measure"]:
+            continue
+
+        # ----------------------------------------------
+        # Skip disabled paths
+        # ----------------------------------------------
+
+        if not path["enabled"]:
+            continue
+
+        # ----------------------------------------------
+        # Get ports
+        # ----------------------------------------------
+
+        input_port = device["ports"][path["input"]]
+
+        output_port = device["ports"][path["output"]]
+
+        # ----------------------------------------------
+        # Create measurement
+        # ----------------------------------------------
+
+        measurement_plan.append({
+
+            "device": path["device"],
+
+            "input": {
+
+                "name": path["input"],
+
+                "x": input_port["x"],
+
+                "y": input_port["y"]
+
+            },
+
+            "output": {
+
+                "name": path["output"],
+
+                "x": output_port["x"],
+
+                "y": output_port["y"]
+
+            },
+
+            "status": path["status"],
+
+            "power": path["power"],
+
+            "timestamp": path["timestamp"]
+
+        })
+
+    return measurement_plan
 
 # ======================================================
 # FUNCIONES INTERNAS
