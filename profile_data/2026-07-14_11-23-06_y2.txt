@@ -1,0 +1,1 @@
+main_position	sub1_position	sub2_position	signal1	signal2

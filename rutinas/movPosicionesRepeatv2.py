@@ -55,7 +55,7 @@ flat_left = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 flat_right = {
@@ -66,7 +66,7 @@ flat_right = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 suruga.connect()

@@ -1,5 +1,11 @@
 from pic_upv.suruga import System, AxisComponents, Alignment, PowerMeter
 
+from osa_simple import YeniOSA
+
+import matplotlib.pyplot as plt
+import time
+from datetime import datetime
+
 import os
 
 
@@ -23,7 +29,7 @@ def cargar_origen():
 # ======================================================
 
 USE_SAVED_ORIGIN = False      # True -> usar origen guardado
-SAVE_ORIGIN = False            # Guardar el origen al iniciar
+SAVE_ORIGIN = True            # Guardar el origen al iniciar
 
 ORIGIN_FILE = "origin.txt"
 
@@ -52,7 +58,7 @@ flat_left = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 flat_right = {
@@ -63,7 +69,7 @@ flat_right = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 suruga.connect()
@@ -71,6 +77,26 @@ suruga.connect()
 # Crear el objeto Power Meter
 pm = PowerMeter(suruga)
 channel = 1
+
+#------------------------------------------------------
+# Configuración del OSA
+#------------------------------------------------------
+
+osa = YeniOSA()
+osa.connect()
+
+CENTER = 1550
+SPAN = 180
+RESOLUTION = 0.2
+# RESOLUTION = 0.05
+SENSITIVITY = -65
+
+osa.setup_sweep(
+    center_nm=CENTER,
+    span_nm=SPAN,
+    resolution_nm=RESOLUTION,
+    sensitivity_dbm=SENSITIVITY,
+)
 
 # ======================================================
 # Posiciones del chip relativas al origen
@@ -148,6 +174,23 @@ for wg in waveguides:
     power = pm.get_power(channel)
     print(f"Potencia: {power}")
 
+    osa.run_sweep(
+    trace=1,
+    averages=1,
+    progress_poll_s=0.5,
+    start_delay_s=2.0,
+    )
+
+    time.sleep(2)
+
+    trace = osa.get_trace(1)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    filename = f"data_osa/medicion_001_{timestamp}_{wg['name']}.txt"
+
+    trace.save_txt(filename)
+
     input("Presione Enter para continuar...")
 
 # ======================================================
@@ -163,5 +206,7 @@ input("Presione Enter para regresar...")
 
 x1.move_absolute(origin_x1)
 x2.move_absolute(origin_x2)
+
+osa.close()
 
 print("Movimiento completado.")

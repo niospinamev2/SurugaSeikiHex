@@ -1,6 +1,5 @@
-import datetime
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -12,46 +11,10 @@ import pyvisa
 # dos de la medición y lo almacena de forma organizada
 @dataclass
 class TraceData:
-    """
-    Container for an optical spectrum trace.
-
-    Attributes
-    ----------
-    wavelength_nm : np.ndarray
-        Wavelength values in nanometers.
-    power_dbm : np.ndarray
-        Optical power values in dBm.
-    metadata : dict
-        Optional information about the measurement.
-    """
     wavelength_nm: np.ndarray
     power_dbm: np.ndarray
-    # Necesitamos incluir informacion adicional sobre la medición
-    metadata: dict = field(default_factory=dict)
 
     def save_txt(self, path):
-        """
-        Save the trace as a tab-separated text file.
-
-        Parameters
-        ----------
-        path : str or Path
-            Output filename.
-        """
-
-        #-------------------------------------------------
-        # Pista de uso
-        #-------------------------------------------------
-
-        # trace = osa.get_trace()
-
-        # trace.metadata["operator"] = "BLABLABLA"
-        # trace.metadata["project"] = "PRODUCT"
-        # trace.metadata["wafer"] = "17753-CFP"
-        # trace.metadata["device"] = "MMI01"
-
-        # trace.save_txt("measurement.txt")
-
         # Convertir la ruta en un objeto Path
         path = Path(path)
         # Verifico la carpeta donde se encuentra el archivo, mkdir()
@@ -59,31 +22,6 @@ class TraceData:
         # intermedias si hacen falta, exist_ok=True evita que aparezca un error 
         # si la carpeta ya existe
         path.parent.mkdir(parents=True, exist_ok=True)
-
-        # -------------------------------------------------
-        # Build header
-        # -------------------------------------------------
-        
-        header = []
-
-        # Add timestamp automatically if it was not supplied
-        if "datetime" not in self.metadata:
-            self.metadata["datetime"] = datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-
-        header.append("# Trace measurement")
-        header.append("#")
-
-        for key, value in self.metadata.items():
-            header.append(f"# {key}: {value}")
-
-        header.append("#")
-        header.append("Wavelength [nm]\tPower [dBm]")
-
-        # -------------------------------------------------
-        # Save data
-        # -------------------------------------------------
         data = np.column_stack([self.wavelength_nm, self.power_dbm])
         np.savetxt(
             path,
@@ -91,8 +29,6 @@ class TraceData:
             fmt="%.10f", # Escribe cada número con 10 decimales
             delimiter="\t", # Tab como separador
             header="Wavelength [nm]\tPower [dBm]",
-            header=header,            
-            comments="# ", # Prefijo para los comentarios
         )
 
 
@@ -253,84 +189,27 @@ class YeniOSA(SimpleVisaInstrument):
 
         print("\nSweep completed.")
 
-    def get_trace(
-        self,
-        trace=1,
-        read_timeout_s=120,
-        metadata_poll_s=0.2,
-        metadata_retries=5,
-    ):
-        """
-        Read the specified trace from the OSA.
-        Waits until the trace metadata becomes available.
-        """
-
-        # ==========================================
-        # 1. Check if info is available
-        # ==========================================
-
-        print("Waiting for trace metadata")
-
-        for attempt in range(metadata_retries):
-
-            try:
-                print("Trace consulting ...")
-                start_m = float(self.query(f":TRACe{trace}:DATA:STAR?"))
-                print("Metadata available.")
-                break
-
-            except pyvisa.errors.VisaIOError:
-
-                print(
-                    f"Metadata not ready "
-                    f"({attempt + 1}/{metadata_retries})"
-                )
-
-                time.sleep(metadata_poll_s)
-
-        else:
-            raise RuntimeError(
-                "Unable to read trace metadata after "
-                f"{metadata_retries} attempts."
-            )
-
-        # ==========================================
-        # 2. Read trace metadata
-        # ==========================================
-
+    def get_trace(self, trace=1, read_timeout_s=120):
         print("Reading trace metadata...")
-
-#        start_m = float(self.query(f":TRACe{np.trace}:DATA:STAR?"))
+        start_m = float(self.query(f":TRACe{trace}:DATA:STAR?"))
         step_m = float(self.query(f":TRACe{trace}:DATA:SAMP?"))
         npoints = int(float(self.query(f":TRACe{trace}:DATA:LENG?")))
-
         print(f"Trace points reported by OSA: {npoints}")
-
         if npoints <= 0:
             raise RuntimeError("The OSA did not report any trace points.")
 
         print("Reading trace power data...")
-
         original_timeout = self.inst.timeout
         self.inst.timeout = max(original_timeout, int(read_timeout_s * 1000))
-
         try:
             power_dbm = self.query_floats(f":TRACe{trace}:DATA? ASC,DBM")
         finally:
             self.inst.timeout = original_timeout
 
         if len(power_dbm) != npoints:
-            print(
-                f"Warning: OSA reported {npoints} points "
-                f"but returned {len(power_dbm)}."
-            )
-
+            print(f"Warning: OSA reported {npoints} points but returned {len(power_dbm)}.")
         wavelength_nm = (start_m + step_m * np.arange(npoints)) * 1e9
-
-        return TraceData(
-            wavelength_nm=wavelength_nm[:len(power_dbm)],
-            power_dbm=power_dbm,
-        )
+        return TraceData(wavelength_nm=wavelength_nm[: len(power_dbm)], power_dbm=power_dbm)
 
 
 class YokogawaOSA(SimpleVisaInstrument):
