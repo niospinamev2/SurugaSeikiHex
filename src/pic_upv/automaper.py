@@ -1,4 +1,6 @@
 """
+03/08/2026
+
 automaper.py
 
 Utilities for loading, visualizing and managing
@@ -27,7 +29,7 @@ class MeasurementPlanGenerated(Exception):
 # LOADERS
 # ======================================================
 
-def load_chip(excel_file):
+def load_chip(excel_file, coupling=None):
     """
     Load a photonic chip from an Excel file.
 
@@ -109,7 +111,8 @@ def load_chip(excel_file):
 
     measurement_plan = create_measurement_plan(
     chip,
-    measurement_paths
+    measurement_paths,
+    coupling=coupling
     )
 
     return chip, measurement_paths, measurement_plan
@@ -212,7 +215,7 @@ def plot_measurement_plan(measurement_plan):
 # FUNCIONES
 # ======================================================
 
-def create_measurement_plan(chip, measurement_paths):
+def create_measurement_plan(chip, measurement_paths, coupling=None):
     """
     Create the measurement plan from the chip description
     and the enabled measurement paths.
@@ -249,6 +252,18 @@ def create_measurement_plan(chip, measurement_paths):
         input_port = device["ports"][path["input"]]
 
         output_port = device["ports"][path["output"]]
+
+        # ----------------------------------------------
+        # Filter by coupling type
+        # ----------------------------------------------
+
+        if coupling is not None:
+
+            if (
+                input_port["coupling"] != coupling or
+                output_port["coupling"] != coupling
+            ):
+                continue
 
         # ----------------------------------------------
         # Create measurement
@@ -326,7 +341,9 @@ def _build_chip(devices_df, ports_df):
 
             "y": row["Y (um)"],
 
-            "direction": row["Direction"]
+            "direction": row["Direction"],
+
+            "coupling": row["Coupling"]
 
         }
 

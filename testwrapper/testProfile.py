@@ -14,7 +14,7 @@ suruga.connect()
 
 profile = Profile(suruga)
 
-Test_axis = "y2"
+Test_axis = "z2"
 
 error = profile.set_profile(
     main_axis_number=Test_axis,

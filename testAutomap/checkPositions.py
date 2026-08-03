@@ -32,6 +32,10 @@ import pic_upv.automaper as automaper
 
 EXCEL_FILE = "chipMaps/SurugaTest.xlsx"
 
+# chip, measurement_paths, measurement_plan = automaper.load_chip(
+#     EXCEL_FILE, coupling="Grating"
+# )
+
 chip, measurement_paths, measurement_plan = automaper.load_chip(
     EXCEL_FILE
 )
