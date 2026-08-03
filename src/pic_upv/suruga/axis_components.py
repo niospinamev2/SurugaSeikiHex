@@ -60,6 +60,34 @@ class AxisComponents:
 
         return self.axis.MoveRelative(distance)
 
+    #==================================================
+    def wait_until_complete(self, intervalo=0.05, retardo_inicial=0.1):
+        """
+        Espera hasta que el eje termine su movimiento.
+
+        Parameters
+        ----------
+        intervalo : float
+            Tiempo entre consultas (s).
+
+        retardo_inicial : float
+            Espera antes de comenzar a consultar.
+        """
+
+        time.sleep(retardo_inicial)
+
+        while self.axis.IsMoving():
+
+            print(
+                f"[Axis {self.attribute.name}] "
+                f"Posición: {self.axis.GetActualPosition():.3f}"
+            )
+
+            time.sleep(intervalo)
+
+        return self.axis.GetStatus()
+    
+
     # def move_relative(self, distance: float):
     #     self.system.ensure_connected()
     #     print(f"[Axis {self.axis_id}] MoveRelative({distance})")
