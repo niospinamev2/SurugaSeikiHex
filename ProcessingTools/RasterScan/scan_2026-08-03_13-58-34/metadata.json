@@ -1,0 +1,264 @@
+{
+    "date": "2026-08-03 13:58:36",
+    "scan_axis": "x2",
+    "profile_axis": "z2",
+    "step": 1,
+    "width": 50,
+    "profiles": [
+        {
+            "file": "profile_000.txt",
+            "center_x": -24979.01,
+            "center_z": -29982.83
+        },
+        {
+            "file": "profile_001.txt",
+            "center_x": -24977.79,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_002.txt",
+            "center_x": -24976.76,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_003.txt",
+            "center_x": -24975.69,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_004.txt",
+            "center_x": -24974.74,
+            "center_z": -29982.78
+        },
+        {
+            "file": "profile_005.txt",
+            "center_x": -24973.72,
+            "center_z": -29982.78
+        },
+        {
+            "file": "profile_006.txt",
+            "center_x": -24972.78,
+            "center_z": -29982.78
+        },
+        {
+            "file": "profile_007.txt",
+            "center_x": -24971.72,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_008.txt",
+            "center_x": -24970.71,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_009.txt",
+            "center_x": -24969.67,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_010.txt",
+            "center_x": -24968.63,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_011.txt",
+            "center_x": -24967.72,
+            "center_z": -29982.82
+        },
+        {
+            "file": "profile_012.txt",
+            "center_x": -24966.78,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_013.txt",
+            "center_x": -24965.76,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_014.txt",
+            "center_x": -24964.76,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_015.txt",
+            "center_x": -24963.73,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_016.txt",
+            "center_x": -24962.75,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_017.txt",
+            "center_x": -24961.81,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_018.txt",
+            "center_x": -24960.76,
+            "center_z": -29982.78
+        },
+        {
+            "file": "profile_019.txt",
+            "center_x": -24959.69,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_020.txt",
+            "center_x": -24958.71,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_021.txt",
+            "center_x": -24957.76,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_022.txt",
+            "center_x": -24956.81,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_023.txt",
+            "center_x": -24955.7,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_024.txt",
+            "center_x": -24954.77,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_025.txt",
+            "center_x": -24953.79,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_026.txt",
+            "center_x": -24952.73,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_027.txt",
+            "center_x": -24951.79,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_028.txt",
+            "center_x": -24950.75,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_029.txt",
+            "center_x": -24949.72,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_030.txt",
+            "center_x": -24948.67,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_031.txt",
+            "center_x": -24947.76,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_032.txt",
+            "center_x": -24946.75,
+            "center_z": -29982.78
+        },
+        {
+            "file": "profile_033.txt",
+            "center_x": -24945.8,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_034.txt",
+            "center_x": -24944.66,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_035.txt",
+            "center_x": -24943.76,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_036.txt",
+            "center_x": -24942.78,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_037.txt",
+            "center_x": -24941.7,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_038.txt",
+            "center_x": -24940.72,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_039.txt",
+            "center_x": -24939.69,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_040.txt",
+            "center_x": -24938.72,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_041.txt",
+            "center_x": -24937.76,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_042.txt",
+            "center_x": -24936.81,
+            "center_z": -29982.8
+        },
+        {
+            "file": "profile_043.txt",
+            "center_x": -24935.71,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_044.txt",
+            "center_x": -24934.76,
+            "center_z": -29982.82
+        },
+        {
+            "file": "profile_045.txt",
+            "center_x": -24933.77,
+            "center_z": -29982.82
+        },
+        {
+            "file": "profile_046.txt",
+            "center_x": -24932.74,
+            "center_z": -29982.81
+        },
+        {
+            "file": "profile_047.txt",
+            "center_x": -24931.75,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_048.txt",
+            "center_x": -24930.76,
+            "center_z": -29982.79
+        },
+        {
+            "file": "profile_049.txt",
+            "center_x": -24929.74,
+            "center_z": -29982.82
+        },
+        {
+            "file": "profile_050.txt",
+            "center_x": -24928.68,
+            "center_z": -29982.79
+        }
+    ]
+}
