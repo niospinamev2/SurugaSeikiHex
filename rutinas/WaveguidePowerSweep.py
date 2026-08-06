@@ -1,14 +1,105 @@
+"""
+===============================================================================
+WaveguidePowerSweep.py                                         T 05/Agosto/2026
+===============================================================================
+
+Purpose
+-------
+Measure the optical power of multiple waveguides by positioning the
+stages relative to a reference origin and performing an automatic
+alignment before each measurement.
+
+The script assumes that the first waveguide (WG0) is already aligned
+or that a previously saved origin is available.
+
+This script does not use Automaper. It is intended for quick 
+characterization or verification of devices on a chip.
+
+The script is designed for measurements using edge coupling with 
+cleaved optical fibers.
+
+Workflow
+--------
+1. Connect to the Suruga motion controller.
+2. Determine the machine origin (current position or saved origin).
+3. Create a measurement file.
+4. For each waveguide:
+   - Move both stages to the target position.
+   - Perform automatic alignment on the left stage.
+   - Perform automatic alignment on the right stage.
+   - Acquire multiple power samples.
+   - Compute the average optical power.
+   - Store the measurement.
+5. Return both stages to the reference origin.
+
+Usage
+-----
+Configure the waveguide positions and measurement settings, then run
+the script.
+
+The script can use the current machine position as the reference
+origin or restore a previously saved origin.
+
+Output
+------
+Creates a timestamped text file containing:
+
+- Measurement date and time.
+- Average optical power for each waveguide.
+
+Optionally creates or updates:
+
+- origin.txt
+
+Requirements
+------------
+- Suruga motion controller.
+- Connected power meter.
+- pic_upv.suruga package.
+
+Notes
+-----
+- WG0 is used as the reference position.
+- All waveguide positions are defined relative to the reference origin.
+- Each reported value corresponds to the average of multiple power
+  meter readings to reduce measurement noise.
+
+===============================================================================
+"""
+
 from pathlib import Path
 from datetime import datetime
 import time
+import os
+import numpy as np
 
 from pic_upv.suruga import System, AxisComponents, Alignment, PowerMeter
+
+
+def guardar_origen(x1, x2):
+
+    with open(ORIGIN_FILE, "w") as f:
+        f.write(f"{x1}\n")
+        f.write(f"{x2}\n")
+
+
+def cargar_origen():
+
+    with open(ORIGIN_FILE, "r") as f:
+        x1 = float(f.readline())
+        x2 = float(f.readline())
+
+    return x1, x2
 
 # ======================================================
 # Configuración
 # ======================================================
+USE_SAVED_ORIGIN = False      # True -> usar origen guardado
+SAVE_ORIGIN = False            # Guardar el origen al iniciar
 
-num_repeticiones = 2
+ORIGIN_FILE = "origin.txt"
+
+num_repeticiones = 1
 channel = 1
 
 # ======================================================
@@ -33,7 +124,7 @@ flat_left = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 flat_right = {
@@ -44,7 +135,7 @@ flat_right = {
     "analog_ch": 1,
     "search_range_x": 50,
     "search_range_y": 20,
-    "init_range": -20,
+    "init_range": -30,
 }
 
 suruga.connect()
@@ -66,8 +157,24 @@ waveguides = [
 # Se asume que la máquina YA está posicionada sobre WG0
 # ======================================================
 
-origin_x1 = x1.get_actual_position()
-origin_x2 = x2.get_actual_position()
+if USE_SAVED_ORIGIN and os.path.exists(ORIGIN_FILE):
+
+    print("Usando origen almacenado...")
+
+    origin_x1, origin_x2 = cargar_origen()
+
+    x1.move_absolute(origin_x1)
+    x2.move_absolute(origin_x2)
+
+else:
+
+    print("Usando posición actual como origen...")
+
+    origin_x1 = x1.get_actual_position()
+    origin_x2 = x2.get_actual_position()
+
+    if SAVE_ORIGIN:
+        guardar_origen(origin_x1, origin_x2)
 
 print("Origen de la máquina")
 print(f"X1 = {origin_x1:.3f}")
@@ -131,7 +238,13 @@ for repeticion in range(num_repeticiones):
 
         time.sleep(1)
 
-        power = pm.get_power(channel)
+        medidas = []
+
+        for i in range(10):
+            medidas.append(pm.get_power(channel))
+            time.sleep(0.1)
+
+        power = np.mean(medidas)
 
         time.sleep(1)
 
