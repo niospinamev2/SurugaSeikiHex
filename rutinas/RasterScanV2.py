@@ -38,7 +38,7 @@ import json
 # Configuración
 # ======================================================
 
-ARM = 1                     # 1 = brazo izquierdo | 2 = brazo derecho
+ARM = 2                     # 1 = brazo izquierdo | 2 = brazo derecho
 
 SCAN_AXIS = f"x{ARM}"
 PROFILE_AXIS = f"z{ARM}"
@@ -152,6 +152,8 @@ for i, x_position in enumerate(np.arange(x0, x1 + SCAN_STEP, SCAN_STEP)):
     # ----------------------------------------------
     # Guardar en memoria
     # ----------------------------------------------
+    # Podriamos usar esto eventualmente para encontrar el maximo 
+    # de potencia directamente en la función
 
     scan_data.append(
         {
@@ -230,90 +232,3 @@ with open(metadata_file, "w", encoding="utf-8") as f:
     json.dump(metadata, f, indent=4)
 
 print(f"\nEscaneo guardado en: {scan_folder}")
-
-
-
-
-
-
-
-# # Info metadata
-
-# metadata = {
-#     "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-#     "scan_axis": "x2",
-#     "profile_axis": "z2",
-#     "step": step,
-#     "width": width,
-#     "profiles": [],
-# }
-
-
-
-
-
-
-
-
-
-# scan_data = []
-
-# for x in np.arange(x0, x1 + step, step):
-
-#     x2.move_absolute(x)
-#     estado = x2.wait_until_complete()
-#     print(estado)   
-#     print(f"Posición X2: {x2.get_actual_position()} µm")
-#     print(profile.start())
-#     estado = profile.wait_until_complete()
-#     print("Estado final:", estado)
-
-#     x_actual = x2.get_actual_position()
-#     z_actual = z2.get_actual_position()
-#     datos = profile.get_profile_data()
-
-#     scan_data.append(
-#         {
-#             "x": x_actual,
-#             "z": z_actual,
-#             "profile": datos,
-#         }
-#     )
-
-#     filename = f"profile_{i:03d}.txt"
-
-#     metadata["profiles"].append(
-#     {
-#         "file": filename,
-#         "center_x": x_actual,
-#         "center_z": z_actual,
-#     }
-#     )
-
-#     # Ejecutar profile en Z
-
-# x2.move_absolute(x_center)
-
-# json.dump(metadata, ...)
-
-
-
-
-
-
-
-
-
-# for x in np.arange(x0, x1, step):
-
-#     system.axis["x2"].move_absolute(x)
-
-#     profile.set_profile(...)
-
-#     profile.start()
-
-#     profile.wait_until_complete()
-
-#     datos = profile.get_profile_data()
-
-#     profiles.append(datos["signal1"])
