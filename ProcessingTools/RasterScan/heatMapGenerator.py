@@ -61,7 +61,7 @@ def load_profile(path: Path) -> tuple[np.ndarray, np.ndarray]:
 # =============================================================
 # Cambio para que funcione sin importar desde que carpeta se ejecute el script
 DATA_FOLDER = Path(__file__).resolve().parent
-
+# entre comillas porque de igual modo scan_folder debe respetar la estructura de carpetas de la carpeta DATA_FOLDER
 scan_folder = DATA_FOLDER / "scan_2026-08-03_13-58-34"
 
 metadata_file = scan_folder / "metadata.json"
