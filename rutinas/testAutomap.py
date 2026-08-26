@@ -2,7 +2,14 @@
 from pathlib import Path
 from pprint import pprint
 
-from pic_upv import automaper
+# -------------------------------------------------
+# First choose one of the following imports
+# Option 1 (recommended): Import the installed version from the pic_upv package.
+#from pic_upv import automaper
+# Option 2: Import this version if you are editing the local osa_simple.py file and want to test those changes.
+import automaper
+# -------------------------------------------------
+
 
 # __file__ contains the rute of the current python file at execution
 # Path creates an object Path that represents the route obtained with Path
