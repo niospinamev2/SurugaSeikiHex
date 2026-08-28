@@ -5,9 +5,9 @@ from pprint import pprint
 # -------------------------------------------------
 # First choose one of the following imports
 # Option 1 (recommended): Import the installed version from the pic_upv package.
-#from pic_upv import automaper
+from pic_upv import automaper
 # Option 2: Import this version if you are editing the local osa_simple.py file and want to test those changes.
-import automaper
+#import automaper
 # -------------------------------------------------
 
 
