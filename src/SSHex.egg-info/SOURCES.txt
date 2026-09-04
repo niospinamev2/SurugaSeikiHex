@@ -1,3 +1,4 @@
+README.md
 pyproject.toml
 src/SSHex.egg-info/PKG-INFO
 src/SSHex.egg-info/SOURCES.txt
@@ -5,8 +6,10 @@ src/SSHex.egg-info/dependency_links.txt
 src/SSHex.egg-info/requires.txt
 src/SSHex.egg-info/top_level.txt
 src/pic_upv/__init__.py
+src/pic_upv/automaper.py
 src/pic_upv/control_suruga.py
 src/pic_upv/control_suruga_class.py
+src/pic_upv/osa_simple.py
 src/pic_upv/dlls/Microsoft.Extensions.Logging.Abstractions.dll
 src/pic_upv/dlls/System.Buffers.dll
 src/pic_upv/dlls/System.ComponentModel.Composition.dll
